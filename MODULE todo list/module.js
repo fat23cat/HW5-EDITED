@@ -230,13 +230,17 @@ var MODULE = (function() {
       //выюорка по дэдлайну
       function selectItemsByDeadline(sortedArr) {
         var tmpArr = [];
+        var date = new Date();
+        var currentDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
         var sel = document.getElementById("deadlines").options[document.getElementById("deadlines").selectedIndex].value;
         switch (sel) {
           case "All deadlines":
             return sortedArr;
             break;
           case "Tomorrow":
-            var tomorrowDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + (date.getDate() + 1);
+            date.setDate(date.getDate()+1);	
+            date.setMonth(date.getMonth()+1);	
+            var tomorrowDate = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
             for (var i = 0; i < sortedArr.length; i++) {
               if (Date.parse(convertToLinesdate(sortedArr[i]["date"])) == Date.parse(tomorrowDate)) {
                 tmpArr.push(sortedArr[i]);
@@ -244,9 +248,9 @@ var MODULE = (function() {
             }
             break;
           case "Next 7 days":
-            var nextDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + (date.getDate() + 7);
+            date.setDate(date.getDate()+7);	
             for (var i = 0; i < sortedArr.length; i++) {
-              if (Date.parse(convertToLinesdate(itemsArr[i]["date"])) <= Date.parse(nextDate)) {
+              if (Date.parse(convertToLinesdate(itemsArr[i]["date"])) <= Date.parse(date)) {
                 tmpArr.push(sortedArr[i]);
               }
             }
@@ -254,6 +258,7 @@ var MODULE = (function() {
         }
         return tmpArr;
       }
+
 
       //преобразование даты из календаря в формат для вывода на форму
       function convertToDotsdate(date) {
